@@ -10,6 +10,7 @@
 #include <myklee.h>
 #include <mypushbtn.h>
 #include <bomb.h>
+#include <QMediaPlayer>
 
 //元素--》场景--》视图
 
@@ -42,6 +43,10 @@ private:
     QList<Bomb*> myBombList;
     QTimer *myKleeMoveTimer;
     QTimer *myBombTimer;
+    QMediaPlayer TitleBGM;
+    QMediaPlayer GameBGM;
+    QMediaPlayer KleeDC;
+    QMediaPlayer KleeAttack;
     myklee myKlee;
 };
 

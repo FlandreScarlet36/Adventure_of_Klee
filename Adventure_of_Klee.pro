@@ -5,6 +5,7 @@
 #-------------------------------------------------
 
 QT       += core gui
+QT       += multimedia
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -28,16 +29,19 @@ SOURCES += \
         widget.cpp \
     bomb.cpp \
     myklee.cpp \
-    mypushbtn.cpp
+    mypushbtn.cpp \
+    enemy.cpp
 
 HEADERS += \
         widget.h \
     bomb.h \
     myklee.h \
-    mypushbtn.h
+    mypushbtn.h \
+    enemy.h
 
 FORMS += \
         widget.ui
 
 RESOURCES += \
     res.qrc
+RC_FILE += myico.rc

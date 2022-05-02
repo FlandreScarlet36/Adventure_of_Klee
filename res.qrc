@@ -11,5 +11,12 @@
         <file>res/StartBtn.png</file>
         <file>res/Title.png</file>
         <file>res/好耶.png</file>
+        <file>res/GameBGM.mp3</file>
+        <file>res/TitleBGM.mp3</file>
+        <file>res/可莉登场.mp3</file>
+        <file>res/蹦蹦炸弹.mp3</file>
+        <file>res/弹起来吧.mp3</file>
+        <file>res/嘿咻.mp3</file>
+        <file>res/呼.mp3</file>
     </qresource>
 </RCC>

@@ -33,11 +33,22 @@ Widget::Widget(QWidget *parent) :
     myGameScene.addItem(&myKlee);
     myGameView.setScene(&myStartScene);//设置场景为开始场景
 
+    this->TitleBGM.setMedia(QUrl("qrc:/res/TitleBGM.mp3"));
+    this->GameBGM.setMedia(QUrl("qrc:/res/GameBGM.mp3"));
+    this->KleeDC.setMedia(QUrl("qrc:/res/可莉登场.mp3"));
+    this->TitleBGM.play();
+    this->TitleBGM.setVolume(10);
+    this->GameBGM.setVolume(20);
+
     MyPushBtn *startBtn=new MyPushBtn(":/res/StartBtn.png");
     startBtn->move(this->width()*0.5-startBtn->width()*0.5,this->height()*0.475);
     myStartScene.addWidget(startBtn);
     connect(startBtn,&MyPushBtn::clicked,[=](){
         qDebug()<<"Game Start!";
+        this->TitleBGM.setVolume(5);
+        this->TitleBGM.stop();
+        this->GameBGM.play();
+        this->KleeDC.play();
         startBtn->zoom1();
         startBtn->zoom2();
         QTimer::singleShot(500,this,[=](){
@@ -139,6 +150,17 @@ void Widget::kleeMove(){
     }
 }
 void Widget::kleeBomb(){
+    int r=qrand()%4;
+    if(r==1){
+        this->KleeAttack.setMedia(QUrl("qrc:/res/嘿咻.mp3"));
+    }
+    if(r==2){
+        this->KleeAttack.setMedia(QUrl("qrc:/res/蹦蹦炸弹.mp3"));
+    }
+    if(r==3){
+        this->KleeAttack.setMedia(QUrl("qrc:/res/弹起来吧.mp3"));
+    }
+    this->KleeAttack.play();
     Bomb* newBomb =new Bomb(QPoint(myKlee.x(),myKlee.y()));
     myGameScene.addItem(newBomb);
     myBombList.append(newBomb);
