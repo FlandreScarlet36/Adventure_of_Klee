@@ -1,17 +1,15 @@
 #ifndef BOMB_H
 #define BOMB_H
 
-#include <QObject>
+#include <QGraphicsPixmapItem>
 
-class bomb : public QObject
+class Bomb : public QGraphicsPixmapItem
 {
-    Q_OBJECT
 public:
-    explicit bomb(QObject *parent = nullptr);
-
-signals:
-
-public slots:
+    explicit Bomb(QObject *parent = nullptr);
+    Bomb(QPoint pos);
+    int speed;
+    void BombMove(QPoint dir=QPoint(1,0));
 };
 
 #endif // BOMB_H

@@ -1,1 +1,15 @@
-<RCC/>
+<RCC>
+    <qresource prefix="/">
+        <file>res/Bg.png</file>
+        <file>res/Bg2.png</file>
+        <file>res/Bomb.png</file>
+        <file>res/boom.png</file>
+        <file>res/boom2.png</file>
+        <file>res/Camp.png</file>
+        <file>res/ICON.jpg</file>
+        <file>res/Klee.png</file>
+        <file>res/StartBtn.png</file>
+        <file>res/Title.png</file>
+        <file>res/好耶.png</file>
+    </qresource>
+</RCC>

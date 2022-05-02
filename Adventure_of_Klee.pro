@@ -25,10 +25,19 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
         main.cpp \
-        widget.cpp
+        widget.cpp \
+    bomb.cpp \
+    myklee.cpp \
+    mypushbtn.cpp
 
 HEADERS += \
-        widget.h
+        widget.h \
+    bomb.h \
+    myklee.h \
+    mypushbtn.h
 
 FORMS += \
         widget.ui
+
+RESOURCES += \
+    res.qrc

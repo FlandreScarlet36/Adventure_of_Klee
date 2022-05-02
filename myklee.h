@@ -1,17 +1,13 @@
 #ifndef MYKLEE_H
 #define MYKLEE_H
 
-#include <QObject>
+#include <QGraphicsPixmapItem>
 
-class myklee : public QObject
+class myklee : public QGraphicsPixmapItem
 {
-    Q_OBJECT
 public:
-    explicit myklee(QObject *parent = nullptr);
-
-signals:
-
-public slots:
+    explicit myklee();
+    float moveSpeed;
 };
 
 #endif // MYKLEE_H
