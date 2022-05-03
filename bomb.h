@@ -10,6 +10,7 @@ public:
     Bomb(QPoint pos);
     int speed;
     int upSpeed;
+    int dir;
     int jumpable = 3;
     void BombMove(QPoint dir=QPoint(1,0));
 };

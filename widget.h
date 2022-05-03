@@ -36,6 +36,7 @@ private:
     Ui::Widget *ui;
     QGraphicsPixmapItem myBg;
     QGraphicsPixmapItem myTitle;
+    QGraphicsPixmapItem option;
     QGraphicsPixmapItem haoYe;
     QGraphicsPixmapItem ground;
     QGraphicsScene myGameScene;

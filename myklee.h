@@ -10,6 +10,7 @@ public:
     float moveSpeed;
     int upSpeed;
     bool coolDown;
+    int faceto;
     void jump();
 };
 

@@ -9,7 +9,6 @@ Bomb::Bomb(QPoint pos){
     speed=6;
     upSpeed=10;
     this->setPos(pos);
-    this->setPixmap(QPixmap("://res/Bomb.png"));
 }
 void Bomb::BombMove(QPoint dir)
 {

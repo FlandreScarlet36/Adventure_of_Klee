@@ -22,11 +22,14 @@ Widget::Widget(QWidget *parent) :
     myTitle.setPixmap(QPixmap("://res/Title.png"));
     haoYe.setPixmap(QPixmap("://res/好耶.png"));
     ground.setPixmap(QPixmap("://res/ground.png"));
+    option.setPixmap(QPixmap("://res/option.png"));
     ground.setPos(0,800);
     myTitle.setScale(1.7);
     myTitle.setPos(this->width()*0.5-440,30);
     haoYe.setScale(1.5);
     haoYe.setPos(0,this->height()-450);
+    option.setScale(1.5);
+    option.setPos(this->width()*0.5-400,300);
 
     myStartScene.addPixmap(QPixmap("://res/Bg.png"));
     myStartScene.addItem(&myTitle);
@@ -34,6 +37,7 @@ Widget::Widget(QWidget *parent) :
     myGameScene.addItem(&ground);
     myStartScene.addItem(&haoYe);
     myGameScene.addItem(&myKlee);
+    myGameScene.addItem(&option);
     myGameView.setScene(&myStartScene);//设置场景为开始场景
 
     this->TitleBGM.setMedia(QUrl("qrc:/res/TitleBGM.mp3"));
@@ -56,6 +60,9 @@ Widget::Widget(QWidget *parent) :
         startBtn->zoom2();
         QTimer::singleShot(500,this,[=](){
             myGameView.setScene(&myGameScene);
+        });
+        QTimer::singleShot(5000,this,[=](){
+            myGameScene.removeItem(&option);//结束引导
         });
     });
     //开始按钮
@@ -113,7 +120,11 @@ Widget::Widget(QWidget *parent) :
     connect(myBombTimer,&QTimer::timeout,[this](){   //炸弹移动定时器
        for(auto bomb:myBombList)
        {
-           bomb->BombMove();
+           bomb->BombMove(QPoint(bomb->dir,0));
+           if(bomb->y()>=740&&bomb->upSpeed<0&&bomb->jumpable!=0){
+               bomb->upSpeed=15;
+               bomb->jumpable--;
+           }
            if(bomb->jumpable==0){
                myBombList.removeOne(bomb);
                bomb->moveBy(-50,-70);
@@ -169,8 +180,12 @@ void Widget::kleeMove(){
 //        case Qt::Key_S:
 //            myKlee.moveBy(0,1*myKlee.moveSpeed);break;
         case Qt::Key_A:
+            myKlee.faceto=-1;
+            myKlee.setPixmap(QPixmap("://res/Kleem.png"));
             myKlee.moveBy(-1*myKlee.moveSpeed,0);break;
         case Qt::Key_D:
+            myKlee.faceto=1;
+            myKlee.setPixmap(QPixmap("://res/Klee.png"));
             myKlee.moveBy(1*myKlee.moveSpeed,0);break;
             }
     }
@@ -188,8 +203,15 @@ void Widget::kleeBomb(){
     }
     this->KleeAttack.play();
     Bomb* newBomb =new Bomb(QPoint(myKlee.x(),myKlee.y()-3));
+    if(myKlee.faceto==-1){
+        newBomb->setPixmap(QPixmap("://res/Bomb.png"));
+    }
+    if(myKlee.faceto==1){
+        newBomb->setPixmap(QPixmap("://res/Bombm.png"));
+    }
     newBomb->upSpeed=15;
     newBomb->jumpable=3;
+    newBomb->dir=myKlee.faceto;
     myGameScene.addItem(newBomb);
     myBombList.append(newBomb);
     myKlee.coolDown=false;

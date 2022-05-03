@@ -22,5 +22,8 @@
         <file>res/leave1.png</file>
         <file>res/leave2.png</file>
         <file>res/Bomb2.png</file>
+        <file>res/option.png</file>
+        <file>res/Bombm.png</file>
+        <file>res/Kleem.png</file>
     </qresource>
 </RCC>
