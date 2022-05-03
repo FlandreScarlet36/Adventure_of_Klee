@@ -8,6 +8,9 @@ class myklee : public QGraphicsPixmapItem
 public:
     explicit myklee();
     float moveSpeed;
+    int upSpeed;
+    bool coolDown;
+    void jump();
 };
 
 #endif // MYKLEE_H

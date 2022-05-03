@@ -18,5 +18,9 @@
         <file>res/弹起来吧.mp3</file>
         <file>res/嘿咻.mp3</file>
         <file>res/呼.mp3</file>
+        <file>res/ground.png</file>
+        <file>res/leave1.png</file>
+        <file>res/leave2.png</file>
+        <file>res/Bomb2.png</file>
     </qresource>
 </RCC>

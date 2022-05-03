@@ -9,6 +9,8 @@ public:
     explicit Bomb(QObject *parent = nullptr);
     Bomb(QPoint pos);
     int speed;
+    int upSpeed;
+    int jumpable = 3;
     void BombMove(QPoint dir=QPoint(1,0));
 };
 

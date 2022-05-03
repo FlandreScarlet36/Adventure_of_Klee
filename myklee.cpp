@@ -4,6 +4,10 @@ myklee::myklee()
 {
 
     this->setPixmap(QPixmap("://res/Klee.png"));
-    this->setPos(700,800);
-    moveSpeed=3;
+    this->setPos(300,730);
+    moveSpeed=6;
+}
+void myklee::jump(){
+    this->moveBy(0,-upSpeed);
+    upSpeed--;
 }

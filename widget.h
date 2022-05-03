@@ -27,6 +27,7 @@ public:
     ~Widget();
     void kleeMove();
     void kleeBomb();
+    void kleeHop();
 
     void keyPressEvent(QKeyEvent *event);
     void keyReleaseEvent(QKeyEvent *event);
@@ -36,6 +37,7 @@ private:
     QGraphicsPixmapItem myBg;
     QGraphicsPixmapItem myTitle;
     QGraphicsPixmapItem haoYe;
+    QGraphicsPixmapItem ground;
     QGraphicsScene myGameScene;
     QGraphicsScene myStartScene;
     QGraphicsView myGameView;

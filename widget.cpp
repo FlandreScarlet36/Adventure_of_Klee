@@ -21,6 +21,8 @@ Widget::Widget(QWidget *parent) :
     myBg.setPixmap(QPixmap("://res/Bg2.png"));
     myTitle.setPixmap(QPixmap("://res/Title.png"));
     haoYe.setPixmap(QPixmap("://res/好耶.png"));
+    ground.setPixmap(QPixmap("://res/ground.png"));
+    ground.setPos(0,800);
     myTitle.setScale(1.7);
     myTitle.setPos(this->width()*0.5-440,30);
     haoYe.setScale(1.5);
@@ -29,6 +31,7 @@ Widget::Widget(QWidget *parent) :
     myStartScene.addPixmap(QPixmap("://res/Bg.png"));
     myStartScene.addItem(&myTitle);
     myGameScene.addItem(&myBg);
+    myGameScene.addItem(&ground);
     myStartScene.addItem(&haoYe);
     myGameScene.addItem(&myKlee);
     myGameView.setScene(&myStartScene);//设置场景为开始场景
@@ -68,11 +71,11 @@ Widget::Widget(QWidget *parent) :
         });
     });
     //退出按钮
-    MyPushBtn *exitBtn2=new MyPushBtn(":/res/Camp.png");
-    exitBtn2->move(this->width()*0.8,this->height()*0.5);
+    MyPushBtn *exitBtn2=new MyPushBtn(":/res/leave2.png");
+    exitBtn2->move(10,10);
     myGameScene.addWidget(exitBtn2);
-    connect(exitBtn2,&MyPushBtn::clicked,[=](){
-        qDebug()<<"Game Start!";
+    connect(exitBtn2,&MyPushBtn::clicked,this,[=](){
+        qDebug()<<"布响丸辣！";
         exitBtn2->zoom1();
         exitBtn2->zoom2();
         QTimer::singleShot(500,this,[=](){
@@ -84,15 +87,44 @@ Widget::Widget(QWidget *parent) :
     myGameView.show();
     //检测移动定时器
     myKleeMoveTimer = new QTimer(this);
-    myKleeMoveTimer->start(5);
-    connect(myKleeMoveTimer,&QTimer::timeout,this,&Widget::kleeMove);
+    myKleeMoveTimer->start(10);
+    connect(myKleeMoveTimer,&QTimer::timeout,this,[=](){
+        if(myKlee.x()<0){
+            myKlee.setX(0);
+        }
+        if(myKlee.x()>this->width()-myKlee.pixmap().width()){
+            myKlee.setX(this->width()-myKlee.pixmap().width());
+        }
+        if(myKlee.y()<0){
+            myKlee.setY(0);
+        }
+        if(myKlee.y()>this->height()-myKlee.pixmap().height()){
+            myKlee.setY(this->height()-myKlee.pixmap().height());
+        }
+        kleeMove();
+        if(myKlee.y()<730){
+            myKlee.jump();                            //落地检测
+        }
+
+    });
 
     myBombTimer=new QTimer(this);
-    myBombTimer->start(10);
-    connect(myBombTimer,&QTimer::timeout,[this](){
+    myBombTimer->start(15);
+    connect(myBombTimer,&QTimer::timeout,[this](){   //炸弹移动定时器
        for(auto bomb:myBombList)
        {
            bomb->BombMove();
+           if(bomb->jumpable==0){
+               myBombList.removeOne(bomb);
+               bomb->moveBy(-50,-70);
+               bomb->setPixmap(QPixmap(":/res/boom.png"));
+               QTimer::singleShot(250,this,[=](){
+                   bomb->setPixmap(QPixmap(":/res/boom2.png"));
+               });
+               QTimer::singleShot(500,this,[=](){
+                   myGameScene.removeItem(bomb); //炸弹弹三下爆炸
+               });
+           }
        }
     });
 }
@@ -103,27 +135,17 @@ Widget::~Widget()
 }
 void Widget::keyPressEvent(QKeyEvent *event){
     switch (event->key()) {
-    case Qt::Key_W:
-    case Qt::Key_S:
+    case Qt::Key_K:
+    //case Qt::Key_S:
     case Qt::Key_A:
     case Qt::Key_D:
         myKeyList.append(event->key());//添加到按键组合
         break;
-    case Qt::Key_E:
-        kleeBomb();
+    case Qt::Key_J:
+        if(myKlee.coolDown){
+            kleeBomb();
+        }
         break;
-    }
-    if(myKlee.x()<0){
-        myKlee.setX(0);
-    }
-    if(myKlee.x()>this->width()-myKlee.pixmap().width()){
-        myKlee.setX(this->width()-myKlee.pixmap().width());
-    }
-    if(myKlee.y()<0){
-        myKlee.setY(0);
-    }
-    if(myKlee.y()>this->height()-myKlee.pixmap().height()){
-        myKlee.setY(this->height()-myKlee.pixmap().height());
     }
 }
 
@@ -134,23 +156,27 @@ void Widget::keyReleaseEvent(QKeyEvent *event){
         myKeyList.removeOne(event->key());
     }
 }
+
 void Widget::kleeMove(){
     for(int keyCode:myKeyList){
         switch (keyCode) {
-        case Qt::Key_W:
-            myKlee.moveBy(0,-1*myKlee.moveSpeed);break;
-        case Qt::Key_S:
-            myKlee.moveBy(0,1*myKlee.moveSpeed);break;
+        case Qt::Key_K:
+            if(myKlee.y()>=730){
+                myKlee.upSpeed=20;
+                myKlee.moveBy(0,-myKlee.moveSpeed);//弹起来吧！
+            }
+            break;
+//        case Qt::Key_S:
+//            myKlee.moveBy(0,1*myKlee.moveSpeed);break;
         case Qt::Key_A:
             myKlee.moveBy(-1*myKlee.moveSpeed,0);break;
         case Qt::Key_D:
             myKlee.moveBy(1*myKlee.moveSpeed,0);break;
-
-        }
+            }
     }
 }
 void Widget::kleeBomb(){
-    int r=qrand()%4;
+    int r=qrand()%3;
     if(r==1){
         this->KleeAttack.setMedia(QUrl("qrc:/res/嘿咻.mp3"));
     }
@@ -161,9 +187,14 @@ void Widget::kleeBomb(){
         this->KleeAttack.setMedia(QUrl("qrc:/res/弹起来吧.mp3"));
     }
     this->KleeAttack.play();
-    Bomb* newBomb =new Bomb(QPoint(myKlee.x(),myKlee.y()));
+    Bomb* newBomb =new Bomb(QPoint(myKlee.x(),myKlee.y()-3));
+    newBomb->upSpeed=15;
+    newBomb->jumpable=3;
     myGameScene.addItem(newBomb);
     myBombList.append(newBomb);
+    myKlee.coolDown=false;
+    QTimer::singleShot(1300,this,[=](){
+        myKlee.coolDown=true;
+    });
 }
-
 
