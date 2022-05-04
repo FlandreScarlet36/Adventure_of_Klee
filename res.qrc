@@ -34,5 +34,8 @@
         <file>res/meat.png</file>
         <file>res/fish.png</file>
         <file>res/fishm.png</file>
+        <file>res/begin.mp3</file>
+        <file>res/end.mp3</file>
+        <file>res/hop.mp3</file>
     </qresource>
 </RCC>

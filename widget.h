@@ -12,6 +12,8 @@
 #include <bomb.h>
 #include <QMediaPlayer>
 #include <fish.h>
+#include <effe.h>
+#include <QMediaPlaylist>
 
 //元素--》场景--》视图
 
@@ -54,7 +56,6 @@ private:
     QTimer *myFishSummonTimer;
     QTimer *myFishMoveTimer;
     QMediaPlayer TitleBGM;
-    QMediaPlayer GameBGM;
     QMediaPlayer KleeDC;
     QMediaPlayer KleeAttack;
     myklee myKlee;

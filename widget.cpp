@@ -7,6 +7,9 @@
 #include <QDebug>
 #include <bomb.h>
 #include <fish.h>
+#include <effe.h>
+#include <QMediaPlaylist>
+#include <QMediaPlayer>
 Widget::Widget(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::Widget)
@@ -55,11 +58,17 @@ Widget::Widget(QWidget *parent) :
     myGameView.setScene(&myStartScene);//设置场景为开始场景
 
     this->TitleBGM.setMedia(QUrl("qrc:/res/TitleBGM.mp3"));
-    this->GameBGM.setMedia(QUrl("qrc:/res/GameBGM.mp3"));
+
+    QMediaPlaylist *playlist = new QMediaPlaylist(this);
+    playlist->addMedia(QUrl("qrc:/res/GameBGM.mp3"));
+    playlist->setPlaybackMode(QMediaPlaylist::Loop);
+    QMediaPlayer *music = new QMediaPlayer();
+    music->setPlaylist(playlist);
+
     this->KleeDC.setMedia(QUrl("qrc:/res/可莉登场.mp3"));
     this->TitleBGM.play();
     this->TitleBGM.setVolume(10);
-    this->GameBGM.setVolume(20);
+    music->setVolume(20);
 
     MyPushBtn *startBtn=new MyPushBtn(":/res/StartBtn.png");
     startBtn->move(this->width()*0.5-startBtn->width()*0.5,this->height()*0.475);
@@ -68,7 +77,7 @@ Widget::Widget(QWidget *parent) :
         qDebug()<<"Game Start!";
         this->TitleBGM.setVolume(5);
         this->TitleBGM.stop();
-        this->GameBGM.play();
+        music->play();
         this->KleeDC.play();
         startBtn->zoom1();
         startBtn->zoom2();
@@ -88,7 +97,7 @@ Widget::Widget(QWidget *parent) :
         teleport->zoom2();
         QTimer::singleShot(500,this,[=](){
             teleport->hide();
-            myKlee.lowest=870;
+            myKlee.lowest=890;
             left=720;
             ground.hide();
             lake.show();
@@ -184,6 +193,10 @@ Widget::Widget(QWidget *parent) :
            if(bomb->y()>=myKlee.lowest&&bomb->upSpeed<0&&bomb->jumpable!=0){
                bomb->upSpeed=15;
                bomb->jumpable--;
+               QMediaPlayer *hop = new QMediaPlayer();
+               hop->setMedia(QUrl("qrc:/res/hop.mp3"));
+               hop->setVolume(10);
+               hop->play();
            }
            if(bomb->jumpable==0){
                myBombList.removeOne(bomb);
@@ -195,6 +208,10 @@ Widget::Widget(QWidget *parent) :
                QTimer::singleShot(200,this,[=](){
                    myGameScene.removeItem(bomb); //炸弹弹三下爆炸
                });
+               QMediaPlayer *end = new QMediaPlayer();
+               end->setVolume(10);
+               end->setMedia(QUrl("qrc:/res/end.mp3"));
+               end->play();
            }
            Collision();
        }
@@ -278,6 +295,10 @@ void Widget::kleeBomb(){
         this->KleeAttack.setMedia(QUrl("qrc:/res/弹起来吧.mp3"));
     }
     this->KleeAttack.play();
+    QMediaPlayer *begin = new QMediaPlayer();
+    begin->setMedia(QUrl("qrc:/res/begin.mp3"));
+    begin->setVolume(10);
+    begin->play();
     Bomb* newBomb =new Bomb(QPoint(myKlee.x(),myKlee.y()-3));
     if(myKlee.faceto==-1){
         newBomb->setPixmap(QPixmap("://res/Bomb.png"));
@@ -321,10 +342,15 @@ void Widget::Collision(){
         for(int j = 0;j<myFishList.size();j++){
             if(myBombList[i]->collidesWithItem(myFishList[j]))
             {
+                effe *meat=new effe(QPoint(myFishList[j]->pos().x()+50,myFishList[j]->pos().y()-20),QPixmap("://res/meat.png"));
+                myGameScene.addItem(meat);
+                QTimer::singleShot(1000,this,[=](){
+                    myGameScene.removeItem(meat);
+                    delete meat;
+                });
                 myFishList[j]->die=true;
-                myFishList[j]->setPixmap(QPixmap("://res/meat.png"));
                 myGameScene.removeItem(myFishList[j]); //炸弹弹三下爆炸
-                myFishList.removeOne(myFishList[j]);
+                myFishList.removeOne(myFishList[j]);         
             }
         }
 }
