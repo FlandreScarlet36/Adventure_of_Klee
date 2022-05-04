@@ -39,6 +39,7 @@ private:
     QGraphicsPixmapItem option;
     QGraphicsPixmapItem haoYe;
     QGraphicsPixmapItem ground;
+    QGraphicsPixmapItem lake;
     QGraphicsScene myGameScene;
     QGraphicsScene myStartScene;
     QGraphicsView myGameView;
@@ -51,6 +52,8 @@ private:
     QMediaPlayer KleeDC;
     QMediaPlayer KleeAttack;
     myklee myKlee;
+    int left;
+    int right;
 };
 
 #endif // WIDGET_H

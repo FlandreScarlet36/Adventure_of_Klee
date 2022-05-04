@@ -11,6 +11,7 @@ public:
     int upSpeed;
     bool coolDown;
     int faceto;
+    int lowest;
     void jump();
 };
 

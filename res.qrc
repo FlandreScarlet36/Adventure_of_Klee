@@ -25,5 +25,11 @@
         <file>res/option.png</file>
         <file>res/Bombm.png</file>
         <file>res/Kleem.png</file>
+        <file>res/KleeBomb.png</file>
+        <file>res/KleeBombm.png</file>
+        <file>res/lake.png</file>
+        <file>res/teleport.png</file>
+        <file>res/teleport1.png</file>
+        <file>res/teleport2.png</file>
     </qresource>
 </RCC>
