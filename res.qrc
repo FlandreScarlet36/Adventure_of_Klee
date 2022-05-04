@@ -31,5 +31,8 @@
         <file>res/teleport.png</file>
         <file>res/teleport1.png</file>
         <file>res/teleport2.png</file>
+        <file>res/meat.png</file>
+        <file>res/fish.png</file>
+        <file>res/fishm.png</file>
     </qresource>
 </RCC>

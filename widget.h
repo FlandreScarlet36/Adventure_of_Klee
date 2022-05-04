@@ -11,6 +11,7 @@
 #include <mypushbtn.h>
 #include <bomb.h>
 #include <QMediaPlayer>
+#include <fish.h>
 
 //元素--》场景--》视图
 
@@ -28,6 +29,8 @@ public:
     void kleeMove();
     void kleeBomb();
     void kleeHop();
+    void summonFish();
+    void Collision();
 
     void keyPressEvent(QKeyEvent *event);
     void keyReleaseEvent(QKeyEvent *event);
@@ -45,8 +48,11 @@ private:
     QGraphicsView myGameView;
     QList<int> myKeyList;
     QList<Bomb*> myBombList;
+    QList<Fish*> myFishList;
     QTimer *myKleeMoveTimer;
     QTimer *myBombTimer;
+    QTimer *myFishSummonTimer;
+    QTimer *myFishMoveTimer;
     QMediaPlayer TitleBGM;
     QMediaPlayer GameBGM;
     QMediaPlayer KleeDC;
@@ -54,6 +60,7 @@ private:
     myklee myKlee;
     int left;
     int right;
+    int scene;
 };
 
 #endif // WIDGET_H

@@ -6,6 +6,7 @@
 #include <mypushbtn.h>
 #include <QDebug>
 #include <bomb.h>
+#include <fish.h>
 Widget::Widget(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::Widget)
@@ -75,21 +76,19 @@ Widget::Widget(QWidget *parent) :
         QTimer::singleShot(500,this,[=](){
             myGameView.setScene(&myGameScene);
         });
-        QTimer::singleShot(5000,this,[=](){
+        QTimer::singleShot(8000,this,[=](){
             myGameScene.removeItem(&option);//结束引导
         });
     });
     //开始按钮
-    teleport->move(200,800-300);
-    QTimer::singleShot(500,this,[=](){
-            teleport->show();
-    });
+    teleport->move(280,800-300);scene=1;
+    teleport->show();
     connect(teleport,&MyPushBtn::clicked,[=](){ //传送锚点传送
         teleport->zoom1();
         teleport->zoom2();
         QTimer::singleShot(500,this,[=](){
             teleport->hide();
-            myKlee.lowest=820;
+            myKlee.lowest=870;
             left=720;
             ground.hide();
             lake.show();
@@ -98,12 +97,13 @@ Widget::Widget(QWidget *parent) :
             myGameScene.addWidget(teleport2);
             teleport2->show();
             myKlee.show();
-
+            scene=2;
         });
     });
 
-    teleport2->move(1200,800-300);
-    connect(teleport2,&MyPushBtn::clicked,[=](){ //传送锚点传送
+    teleport2->move(1210,800-300);
+    summonFish();
+    connect(teleport2,&MyPushBtn::clicked,[=](){ //传送锚点传送回家
         teleport2->zoom1();
         teleport2->zoom2();
         QTimer::singleShot(500,this,[=](){
@@ -114,6 +114,7 @@ Widget::Widget(QWidget *parent) :
             lake.hide();
             ground.show();
             myKlee.setPos(300,730);
+            scene=1;
         });
     });
     MyPushBtn *exitBtn=new MyPushBtn(":/res/Camp.png");
@@ -195,6 +196,21 @@ Widget::Widget(QWidget *parent) :
                    myGameScene.removeItem(bomb); //炸弹弹三下爆炸
                });
            }
+           Collision();
+       }
+    });
+    //开启鱼移动定时器
+    myFishMoveTimer = new QTimer(this);
+    myFishMoveTimer->start(20);
+    connect(myFishMoveTimer,&QTimer::timeout,[this](){
+       for(auto Fish:myFishList){
+           if(scene==2)
+               Fish->show();
+           else {
+               Fish->hide();
+           }
+           if(!Fish->die)
+           Fish->move();
        }
     });
 }
@@ -279,5 +295,37 @@ void Widget::kleeBomb(){
     QTimer::singleShot(1500,this,[=](){
         myKlee.coolDown=true;
     });
+}
+void Widget::summonFish(){
+    myFishSummonTimer=new QTimer(this);
+    myFishSummonTimer->start(1000+qrand()%1000);
+    connect(myFishSummonTimer,&QTimer::timeout,this,[=](){
+        int flag=qrand()%2,x;
+        if(flag==0){
+            x=-200;
+        }
+        if(flag==1){
+            x=1612;
+        }
+        Fish* fish=new Fish(QPoint(x,920+qrand()%20));
+        if(flag==1){
+            fish->speed=-fish->speed;
+            fish->setPixmap(QPixmap("://res/fishm.png"));
+        }
+        myGameScene.addItem(fish);
+        myFishList.append(fish);
+    });
+}
+void Widget::Collision(){
+    for(int i = 0;i<myBombList.size();i++)
+        for(int j = 0;j<myFishList.size();j++){
+            if(myBombList[i]->collidesWithItem(myFishList[j]))
+            {
+                myFishList[j]->die=true;
+                myFishList[j]->setPixmap(QPixmap("://res/meat.png"));
+                myGameScene.removeItem(myFishList[j]); //炸弹弹三下爆炸
+                myFishList.removeOne(myFishList[j]);
+            }
+        }
 }
 

@@ -30,14 +30,14 @@ SOURCES += \
     bomb.cpp \
     myklee.cpp \
     mypushbtn.cpp \
-    enemy.cpp
+    fish.cpp
 
 HEADERS += \
         widget.h \
     bomb.h \
     myklee.h \
     mypushbtn.h \
-    enemy.h
+    fish.h
 
 FORMS += \
         widget.ui

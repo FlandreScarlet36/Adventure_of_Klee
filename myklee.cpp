@@ -4,7 +4,7 @@ myklee::myklee()
 {
 
     this->setPixmap(QPixmap("://res/Klee.png"));
-    this->setPos(300,730);
+    this->setPos(545,730);
     moveSpeed=6;
     faceto=1;
     coolDown=true;
