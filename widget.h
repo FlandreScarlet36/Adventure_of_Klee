@@ -55,6 +55,7 @@ private:
     QTimer *myBombTimer;
     QTimer *myFishSummonTimer;
     QTimer *myFishMoveTimer;
+    QTimer *myShadowMoveTimer;
     QMediaPlayer TitleBGM;
     QMediaPlayer KleeDC;
     QMediaPlayer KleeAttack;

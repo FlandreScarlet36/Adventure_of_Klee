@@ -2,6 +2,7 @@
 #define BOMB_H
 
 #include <QGraphicsPixmapItem>
+#include <shadow.h>
 
 class Bomb : public QGraphicsPixmapItem
 {
@@ -11,6 +12,7 @@ public:
     int speed;
     int upSpeed;
     int dir;
+    shadow bombshadow;
     int jumpable = 3;
     void BombMove(QPoint dir=QPoint(1,0));
 };

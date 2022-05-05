@@ -54,6 +54,7 @@ Widget::Widget(QWidget *parent) :
     myGameScene.addWidget(teleport2);
     teleport2->hide();
     myGameScene.addItem(&option);
+    myGameScene.addItem(&myKlee.kleeshadow);
     myGameScene.addItem(&myKlee);
     myGameView.setScene(&myStartScene);//设置场景为开始场景
 
@@ -166,10 +167,11 @@ Widget::Widget(QWidget *parent) :
         if(myKlee.y()<0){
             myKlee.setY(0);
         }
-        if(myKlee.y()>this->height()-myKlee.pixmap().height()){
-            myKlee.setY(this->height()-myKlee.pixmap().height());
+        if(myKlee.y()>730){
+            myKlee.setY(730);
         }
         kleeMove();
+        myKlee.kleeshadow.setX(myKlee.x()+28);
         if(myKlee.y()<730){
             myKlee.jump();                            //落地检测
         }
@@ -198,7 +200,9 @@ Widget::Widget(QWidget *parent) :
                hop->setVolume(10);
                hop->play();
            }
+           bomb->bombshadow.setX(bomb->x());
            if(bomb->jumpable==0){
+               bomb->bombshadow.hide();
                myBombList.removeOne(bomb);
                bomb->moveBy(-100,-100);
                bomb->setPixmap(QPixmap(":/res/boom.png"));
@@ -214,6 +218,7 @@ Widget::Widget(QWidget *parent) :
                end->play();
            }
            Collision();
+
        }
     });
     //开启鱼移动定时器
@@ -311,6 +316,7 @@ void Widget::kleeBomb(){
     newBomb->jumpable=3;
     newBomb->dir=myKlee.faceto;
     myGameScene.addItem(newBomb);
+    newBomb->bombshadow.setY(myKlee.lowest+50);
     myBombList.append(newBomb);
     myKlee.coolDown=false;
     QTimer::singleShot(1500,this,[=](){
@@ -342,8 +348,11 @@ void Widget::Collision(){
         for(int j = 0;j<myFishList.size();j++){
             if(myBombList[i]->collidesWithItem(myFishList[j]))
             {
-                effe *meat=new effe(QPoint(myFishList[j]->pos().x()+50,myFishList[j]->pos().y()-20),QPixmap("://res/meat.png"));
+                effe *meat=new effe(QPoint(myFishList[j]->pos().x()+50,myFishList[j]->pos().y()-20),QPixmap("://res/hotmeat.png"));
                 myGameScene.addItem(meat);
+                QTimer::singleShot(100,this,[=](){
+                    meat->setPixmap(QPixmap("://res/meat.png"));
+                });
                 QTimer::singleShot(1000,this,[=](){
                     myGameScene.removeItem(meat);
                     delete meat;

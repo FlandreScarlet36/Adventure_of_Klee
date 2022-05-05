@@ -31,7 +31,9 @@ SOURCES += \
     myklee.cpp \
     mypushbtn.cpp \
     fish.cpp \
-    effe.cpp
+    effe.cpp \
+    ball.cpp \
+    shadow.cpp
 
 HEADERS += \
         widget.h \
@@ -39,7 +41,9 @@ HEADERS += \
     myklee.h \
     mypushbtn.h \
     fish.h \
-    effe.h
+    effe.h \
+    ball.h \
+    shadow.h
 
 FORMS += \
         widget.ui

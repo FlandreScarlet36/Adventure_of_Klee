@@ -2,6 +2,7 @@
 #define MYKLEE_H
 
 #include <QGraphicsPixmapItem>
+#include <shadow.h>
 
 class myklee : public QGraphicsPixmapItem
 {
@@ -12,6 +13,7 @@ public:
     bool coolDown;
     int faceto;
     int lowest;
+    shadow kleeshadow;
     void jump();
 };
 
