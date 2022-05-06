@@ -1,9 +1,12 @@
 #include "ball.h"
 
-Ball::Ball(QObject *parent)
-{
-
+Ball::Ball(){
+    speed=10;
+    upSpeed=10;
 }
-Ball::Ball(QPoint pos){
-    this->setPos(pos);
+void Ball::BallMove()
+{
+    this->moveBy(dir*speed,0);
+        this->moveBy(0,-upSpeed);
+        upSpeed--;
 }

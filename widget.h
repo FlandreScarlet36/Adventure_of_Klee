@@ -14,6 +14,7 @@
 #include <fish.h>
 #include <effe.h>
 #include <QMediaPlaylist>
+#include <ball.h>
 
 //元素--》场景--》视图
 
@@ -31,6 +32,7 @@ public:
     void kleeMove();
     void kleeBomb();
     void kleeHop();
+    void kleeBall();
     void summonFish();
     void Collision();
 
@@ -44,9 +46,11 @@ private:
     QGraphicsPixmapItem option;
     QGraphicsPixmapItem haoYe;
     QGraphicsPixmapItem ground;
+    QGraphicsPixmapItem ground2;
     QGraphicsPixmapItem lake;
     QGraphicsScene myGameScene;
     QGraphicsScene myStartScene;
+    QGraphicsScene myBallScene;
     QGraphicsView myGameView;
     QList<int> myKeyList;
     QList<Bomb*> myBombList;
@@ -56,13 +60,17 @@ private:
     QTimer *myFishSummonTimer;
     QTimer *myFishMoveTimer;
     QTimer *myShadowMoveTimer;
+    QTimer *myBallMoveTimer;
     QMediaPlayer TitleBGM;
     QMediaPlayer KleeDC;
     QMediaPlayer KleeAttack;
     myklee myKlee;
+    Ball myBall;
+
     int left;
     int right;
     int scene;
+    bool isBall=false;
 };
 
 #endif // WIDGET_H

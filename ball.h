@@ -6,12 +6,12 @@
 class Ball : public QGraphicsPixmapItem
 {
 public:
-    explicit Ball(QObject *parent = nullptr);
-    Ball(QPoint pos);
+    Ball();
+    void BallMove();
+    int speed;
+    int upSpeed;
+    int dir;
 
-signals:
-
-public slots:
 };
 
 #endif // BALL_H

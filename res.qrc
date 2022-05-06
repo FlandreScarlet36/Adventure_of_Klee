@@ -39,5 +39,6 @@
         <file>res/hop.mp3</file>
         <file>res/hotmeat.png</file>
         <file>res/shadow.png</file>
+        <file>res/ball.png</file>
     </qresource>
 </RCC>

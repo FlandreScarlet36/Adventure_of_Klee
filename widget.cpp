@@ -28,9 +28,12 @@ Widget::Widget(QWidget *parent) :
     myTitle.setPixmap(QPixmap("://res/Title.png"));
     haoYe.setPixmap(QPixmap("://res/好耶.png"));
     ground.setPixmap(QPixmap("://res/ground.png"));
+    ground2.setPixmap(QPixmap("://res/ground.png"));
     option.setPixmap(QPixmap("://res/option.png"));
     lake.setPixmap(QPixmap("://res/lake.png"));
+    myBall.setPixmap(QPixmap("://res/ball.png"));
     ground.setPos(0,800);
+    ground2.setPos(0,800);
     lake.setPos(0,800);
     myTitle.setScale(1.7);
     myTitle.setPos(this->width()*0.5-440,30);
@@ -40,6 +43,9 @@ Widget::Widget(QWidget *parent) :
     option.setPos(this->width()*0.5-400,300);
 
     myStartScene.addPixmap(QPixmap("://res/Bg.png"));
+    myBallScene.addPixmap(QPixmap("://res/Bg2.png"));
+    myBallScene.addItem(&ground2);
+    myBallScene.addItem(&myBall);
     myStartScene.addItem(&myTitle);
     myGameScene.addItem(&myBg);
     myGameScene.addItem(&ground);
@@ -50,8 +56,10 @@ Widget::Widget(QWidget *parent) :
 
     MyPushBtn *teleport=new MyPushBtn(":/res/teleport1.png");
     MyPushBtn *teleport2=new MyPushBtn(":/res/teleport2.png");
+    MyPushBtn *teleportBall=new MyPushBtn(":/res/teleport1.png");
     myGameScene.addWidget(teleport);
     myGameScene.addWidget(teleport2);
+    myGameScene.addWidget(teleportBall);
     teleport2->hide();
     myGameScene.addItem(&option);
     myGameScene.addItem(&myKlee.kleeshadow);
@@ -98,6 +106,7 @@ Widget::Widget(QWidget *parent) :
         teleport->zoom2();
         QTimer::singleShot(500,this,[=](){
             teleport->hide();
+            teleportBall->hide();
             myKlee.lowest=890;
             left=720;
             ground.hide();
@@ -119,6 +128,7 @@ Widget::Widget(QWidget *parent) :
         QTimer::singleShot(500,this,[=](){
             teleport2->hide();
             teleport->show();
+            teleportBall->show();
             myKlee.lowest=750;
             left=0;
             lake.hide();
@@ -126,6 +136,16 @@ Widget::Widget(QWidget *parent) :
             myKlee.setPos(300,730);
             scene=1;
         });
+    });
+    teleportBall->move(1210,800-300);
+    connect(teleportBall,&MyPushBtn::clicked,[=](){ //传送锚点传送去打球
+        scene = 3;
+        right=750;
+        myGameScene.removeItem(&myKlee);
+        myGameScene.removeItem(&myKlee.kleeshadow);
+        myBallScene.addItem(&myKlee.kleeshadow);
+        myBallScene.addItem(&myKlee);
+        myGameView.setScene(&myBallScene);
     });
     MyPushBtn *exitBtn=new MyPushBtn(":/res/Camp.png");
     myStartScene.addWidget(exitBtn);
@@ -235,6 +255,15 @@ Widget::Widget(QWidget *parent) :
            Fish->move();
        }
     });
+    myBallMoveTimer = new QTimer(this);
+    myBallMoveTimer->start(17);
+    connect(myBallMoveTimer,&QTimer::timeout,[=](){
+       myBall.BallMove();
+       if(myBall.y()>=830) {
+          myBall.hide();
+          isBall=false;
+       }
+    });
 }
 
 Widget::~Widget()
@@ -250,8 +279,11 @@ void Widget::keyPressEvent(QKeyEvent *event){
         myKeyList.append(event->key());//添加到按键组合
         break;
     case Qt::Key_J:
-        if(myKlee.coolDown){
+        if(myKlee.coolDown&&scene!=3){
             kleeBomb();
+        }
+        if(myKlee.coolDown&&scene==3&&!isBall){
+            kleeBall();
         }
         break;
     }
@@ -319,6 +351,17 @@ void Widget::kleeBomb(){
     newBomb->bombshadow.setY(myKlee.lowest+75);
     myGameScene.addItem(&newBomb->bombshadow);
     myBombList.append(newBomb);
+    myKlee.coolDown=false;
+    QTimer::singleShot(1500,this,[=](){
+        myKlee.coolDown=true;
+    });
+}
+void Widget::kleeBall(){                      //丢球函数
+    myBall.show();
+    isBall=true;
+    myBall.setPos(myKlee.x()+30,myKlee.y());
+    myBall.upSpeed=33;
+    myBall.dir=1;
     myKlee.coolDown=false;
     QTimer::singleShot(1500,this,[=](){
         myKlee.coolDown=true;
