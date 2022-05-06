@@ -61,16 +61,19 @@ private:
     QTimer *myFishMoveTimer;
     QTimer *myShadowMoveTimer;
     QTimer *myBallMoveTimer;
+    QTimer *myKaeyaMoveTimer;
     QMediaPlayer TitleBGM;
     QMediaPlayer KleeDC;
     QMediaPlayer KleeAttack;
     myklee myKlee;
+    myklee myKaeya;
     Ball myBall;
 
     int left;
     int right;
     int scene;
     bool isBall=false;
+    bool kaeyaturn=true;
 };
 
 #endif // WIDGET_H

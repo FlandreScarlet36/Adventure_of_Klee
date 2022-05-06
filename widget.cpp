@@ -28,24 +28,24 @@ Widget::Widget(QWidget *parent) :
     myTitle.setPixmap(QPixmap("://res/Title.png"));
     haoYe.setPixmap(QPixmap("://res/好耶.png"));
     ground.setPixmap(QPixmap("://res/ground.png"));
-    ground2.setPixmap(QPixmap("://res/ground.png"));
+    ground2.setPixmap(QPixmap("://res/ground2.png"));
     option.setPixmap(QPixmap("://res/option.png"));
     lake.setPixmap(QPixmap("://res/lake.png"));
     myBall.setPixmap(QPixmap("://res/ball.png"));
+    myKaeya.setPixmap(QPixmap("://res/kaeya.png"));
     ground.setPos(0,800);
-    ground2.setPos(0,800);
+    ground2.setPos(0,1000-320);
     lake.setPos(0,800);
     myTitle.setScale(1.7);
     myTitle.setPos(this->width()*0.5-440,30);
     haoYe.setScale(1.5);
     haoYe.setPos(0,this->height()-450);
     option.setScale(1.5);
-    option.setPos(this->width()*0.5-400,300);
+    option.setPos(this->width()*0.5-300,200);
 
     myStartScene.addPixmap(QPixmap("://res/Bg.png"));
     myBallScene.addPixmap(QPixmap("://res/Bg2.png"));
     myBallScene.addItem(&ground2);
-    myBallScene.addItem(&myBall);
     myStartScene.addItem(&myTitle);
     myGameScene.addItem(&myBg);
     myGameScene.addItem(&ground);
@@ -56,10 +56,15 @@ Widget::Widget(QWidget *parent) :
 
     MyPushBtn *teleport=new MyPushBtn(":/res/teleport1.png");
     MyPushBtn *teleport2=new MyPushBtn(":/res/teleport2.png");
-    MyPushBtn *teleportBall=new MyPushBtn(":/res/teleport1.png");
+    MyPushBtn *teleport22=new MyPushBtn(":/res/teleport2.png");
+    MyPushBtn *teleportBall=new MyPushBtn("://res/wanqiu.png");
     myGameScene.addWidget(teleport);
     myGameScene.addWidget(teleport2);
     myGameScene.addWidget(teleportBall);
+    myBallScene.addWidget(teleport22);
+    myBallScene.addItem(&myBall);
+    myBallScene.addItem(&myKaeya);
+    myBallScene.addItem(&myKaeya.kleeshadow);
     teleport2->hide();
     myGameScene.addItem(&option);
     myGameScene.addItem(&myKlee.kleeshadow);
@@ -137,15 +142,37 @@ Widget::Widget(QWidget *parent) :
             scene=1;
         });
     });
-    teleportBall->move(1210,800-300);
+    teleport22->move(280,800-300);
+    connect(teleport22,&MyPushBtn::clicked,[=](){ //传送锚点传送回家
+        teleport22->zoom1();
+        teleport22->zoom2();
+        QTimer::singleShot(500,this,[=](){
+            myKlee.setPos(300,730);
+            scene = 1;
+            right=this->width();
+            myBallScene.removeItem(&myKlee);
+            myBallScene.removeItem(&myKlee.kleeshadow);
+            myGameScene.addItem(&myKlee.kleeshadow);
+            myGameScene.addItem(&myKlee);
+            myGameView.setScene(&myGameScene);
+        });
+    });
+    teleportBall->move(975,800-148);
     connect(teleportBall,&MyPushBtn::clicked,[=](){ //传送锚点传送去打球
-        scene = 3;
-        right=750;
-        myGameScene.removeItem(&myKlee);
-        myGameScene.removeItem(&myKlee.kleeshadow);
-        myBallScene.addItem(&myKlee.kleeshadow);
-        myBallScene.addItem(&myKlee);
-        myGameView.setScene(&myBallScene);
+        teleportBall->zoom1();
+        teleportBall->zoom2();
+        QTimer::singleShot(500,this,[=](){
+            scene = 3;
+            right=750;
+            myKaeya.setPos(1100,725);
+            myKlee.setPos(300,730);
+            myBall.hide();
+            myGameScene.removeItem(&myKlee);
+            myGameScene.removeItem(&myKlee.kleeshadow);
+            myBallScene.addItem(&myKlee.kleeshadow);
+            myBallScene.addItem(&myKlee);
+            myGameView.setScene(&myBallScene);
+        });
     });
     MyPushBtn *exitBtn=new MyPushBtn(":/res/Camp.png");
     myStartScene.addWidget(exitBtn);
@@ -167,6 +194,17 @@ Widget::Widget(QWidget *parent) :
         qDebug()<<"布响丸辣！";
         exitBtn2->zoom1();
         exitBtn2->zoom2();
+        QTimer::singleShot(500,this,[=](){
+            this->close();
+        });
+    });
+    MyPushBtn *exitBtn3=new MyPushBtn(":/res/leave2.png");
+    exitBtn3->move(10,10);
+    myBallScene.addWidget(exitBtn3);
+    connect(exitBtn3,&MyPushBtn::clicked,this,[=](){
+        qDebug()<<"布响丸辣！";
+        exitBtn3->zoom1();
+        exitBtn3->zoom2();
         QTimer::singleShot(500,this,[=](){
             this->close();
         });
@@ -262,7 +300,41 @@ Widget::Widget(QWidget *parent) :
        if(myBall.y()>=830) {
           myBall.hide();
           isBall=false;
+          kaeyaturn=false;
        }
+       if(myBall.collidesWithItem(&myKlee)){
+           myBall.upSpeed=30+qrand()%6;
+           myBall.speed=8+qrand()%4;
+           myBall.dir=1;
+           kaeyaturn=true;
+       }
+       if(myBall.collidesWithItem(&myKaeya)){
+           myBall.upSpeed=30+qrand()%6;
+           myBall.speed=8+qrand()%4;
+           myBall.dir=-1;kaeyaturn=false;
+       }
+    });
+    myKaeyaMoveTimer = new QTimer(this);
+    myKaeyaMoveTimer->start(10);
+    connect(myKaeyaMoveTimer,&QTimer::timeout,[=](){
+        if((myBall.x()<myKaeya.x()&&myBall.x()>700)&&kaeyaturn&&myKaeya.x()-myBall.x()>300){
+            myKaeya.moveBy(-10,0);
+        }
+        if((myBall.x()<myKaeya.x()&&myBall.x()>700)&&kaeyaturn&&myKaeya.x()-myBall.x()<=300){
+            myKaeya.moveBy(-5,0);
+        }
+        if((myBall.x()>myKaeya.x()&&myBall.x()>700)&&kaeyaturn){
+            myKaeya.moveBy(10,0);
+        }
+        myKaeya.kleeshadow.setX(myKaeya.x()+10);
+        if(myKaeya.y()>725){
+            myKaeya.setY(725);
+        }
+        if(myBall.x()==myKaeya.x()&&myKaeya.y()==725)
+        {
+            myKaeya.upSpeed=20;
+            myKaeya.jump();
+        }
     });
 }
 
@@ -357,10 +429,22 @@ void Widget::kleeBomb(){
     });
 }
 void Widget::kleeBall(){                      //丢球函数
+    int r=qrand()%3;
+    QMediaPlayer *b = new QMediaPlayer();
+    if(r==1){
+        b->setMedia(QUrl("qrc:/res/嘿！.mp3"));
+    }
+    if(r==2){
+        b->setMedia(QUrl("qrc:/res/嘿呀.mp3"));
+    }
+    if(r==0){
+        b->setMedia(QUrl("qrc:/res/嚯咦.mp3"));
+    }
+    b->play();
     myBall.show();
     isBall=true;
     myBall.setPos(myKlee.x()+30,myKlee.y());
-    myBall.upSpeed=33;
+    myBall.upSpeed=30+qrand()%6;
     myBall.dir=1;
     myKlee.coolDown=false;
     QTimer::singleShot(1500,this,[=](){
