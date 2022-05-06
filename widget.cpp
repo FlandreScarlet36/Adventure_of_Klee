@@ -330,10 +330,16 @@ Widget::Widget(QWidget *parent) :
         if(myKaeya.y()>725){
             myKaeya.setY(725);
         }
-        if(myBall.x()==myKaeya.x()&&myKaeya.y()==725)
+        if(myKaeya.x()>this->width()-70){
+            myKaeya.setX(this->width()-70);
+        }
+        if(myKaeya.y()<725)
         {
-            myKaeya.upSpeed=20;
             myKaeya.jump();
+        }
+        if(myBall.x()==myKaeya.x()&&myKaeya.y()==725){
+            myKaeya.upSpeed=20;
+            myKaeya.moveBy(0,-myKaeya.upSpeed);
         }
     });
 }
