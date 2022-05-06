@@ -30,6 +30,7 @@ Widget::Widget(QWidget *parent) :
     ground.setPixmap(QPixmap("://res/ground.png"));
     ground2.setPixmap(QPixmap("://res/ground2.png"));
     option.setPixmap(QPixmap("://res/option.png"));
+    option2.setPixmap(QPixmap("://res/option2.png"));
     lake.setPixmap(QPixmap("://res/lake.png"));
     myBall.setPixmap(QPixmap("://res/ball.png"));
     myKaeya.setPixmap(QPixmap("://res/kaeya.png"));
@@ -42,6 +43,8 @@ Widget::Widget(QWidget *parent) :
     haoYe.setPos(0,this->height()-450);
     option.setScale(1.5);
     option.setPos(this->width()*0.5-300,200);
+    option2.setScale(1.5);
+    option2.setPos(this->width()*0.5-300,200);
 
     myStartScene.addPixmap(QPixmap("://res/Bg.png"));
     myBallScene.addPixmap(QPixmap("://res/Bg2.png"));
@@ -51,6 +54,7 @@ Widget::Widget(QWidget *parent) :
     myGameScene.addItem(&ground);
     myGameScene.addItem(&ground);
     myGameScene.addItem(&lake);
+    myBallScene.addItem(&option2);
     lake.hide();
     myStartScene.addItem(&haoYe);
 
@@ -146,6 +150,9 @@ Widget::Widget(QWidget *parent) :
     connect(teleport22,&MyPushBtn::clicked,[=](){ //传送锚点传送回家
         teleport22->zoom1();
         teleport22->zoom2();
+        myFishMoveTimer->start(20);
+        myFishSummonTimer->start(1000+qrand()%1000);
+        myBombTimer->start(15);
         QTimer::singleShot(500,this,[=](){
             myKlee.setPos(300,730);
             scene = 1;
@@ -159,8 +166,15 @@ Widget::Widget(QWidget *parent) :
     });
     teleportBall->move(975,800-148);
     connect(teleportBall,&MyPushBtn::clicked,[=](){ //传送锚点传送去打球
+
+        myFishMoveTimer->stop();
+        myFishSummonTimer->stop();
+        myBombTimer->stop();
         teleportBall->zoom1();
         teleportBall->zoom2();
+        QTimer::singleShot(5000,this,[=](){
+            option2.hide();
+        });
         QTimer::singleShot(500,this,[=](){
             scene = 3;
             right=750;
@@ -303,14 +317,14 @@ Widget::Widget(QWidget *parent) :
           kaeyaturn=false;
        }
        if(myBall.collidesWithItem(&myKlee)){
-           myBall.upSpeed=30+qrand()%6;
-           myBall.speed=8+qrand()%4;
+           myBall.upSpeed=20+qrand()%16;
+           myBall.speed=7+qrand()%8;
            myBall.dir=1;
            kaeyaturn=true;
        }
        if(myBall.collidesWithItem(&myKaeya)){
-           myBall.upSpeed=30+qrand()%6;
-           myBall.speed=8+qrand()%4;
+           myBall.upSpeed=20+qrand()%16;
+           myBall.speed=7+qrand()%8;
            myBall.dir=-1;kaeyaturn=false;
        }
     });

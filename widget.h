@@ -48,6 +48,7 @@ private:
     QGraphicsPixmapItem ground;
     QGraphicsPixmapItem ground2;
     QGraphicsPixmapItem lake;
+    QGraphicsPixmapItem option2;
     QGraphicsScene myGameScene;
     QGraphicsScene myStartScene;
     QGraphicsScene myBallScene;
