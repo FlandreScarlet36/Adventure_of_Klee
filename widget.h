@@ -5,7 +5,7 @@
 #include <QGraphicsPixmapItem>//元素
 #include <QGraphicsScene>//场景
 #include <QGraphicsView>//视图
-#include<QTimer>
+#include <QTimer>
 #include <QList>
 #include <myklee.h>
 #include <mypushbtn.h>

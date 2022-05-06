@@ -58,14 +58,14 @@ void MyPushBtn::zoom1(){
     QPropertyAnimation*animation=new QPropertyAnimation(this,"geometry");
     animation->setDuration(400);
     animation->setStartValue(QRect(this->x(),this->y(),this->width(),this->height()));
-    animation->setEndValue(QRect(this->x(),this->y()+20,this->width(),this->height()));
+    animation->setEndValue(QRect(this->x(),this->y()+15,this->width(),this->height()));
     animation->setEasingCurve(QEasingCurve::OutBounce);
     animation->start();
 }
 void MyPushBtn::zoom2(){
     QPropertyAnimation*animation=new QPropertyAnimation(this,"geometry");
     animation->setDuration(400);
-    animation->setStartValue(QRect(this->x(),this->y()+20,this->width(),this->height()));
+    animation->setStartValue(QRect(this->x(),this->y()+15,this->width(),this->height()));
     animation->setEndValue(QRect(this->x(),this->y(),this->width(),this->height()));
     animation->setEasingCurve(QEasingCurve::OutBounce);
     animation->start();

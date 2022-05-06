@@ -171,7 +171,7 @@ Widget::Widget(QWidget *parent) :
             myKlee.setY(730);
         }
         kleeMove();
-        myKlee.kleeshadow.setX(myKlee.x()+28);
+        myKlee.kleeshadow.setX(myKlee.x()+18);
         if(myKlee.y()<730){
             myKlee.jump();                            //落地检测
         }
@@ -200,7 +200,7 @@ Widget::Widget(QWidget *parent) :
                hop->setVolume(10);
                hop->play();
            }
-           bomb->bombshadow.setX(bomb->x());
+           bomb->bombshadow.setX(bomb->x()+10);
            if(bomb->jumpable==0){
                bomb->bombshadow.hide();
                myBombList.removeOne(bomb);
@@ -316,7 +316,8 @@ void Widget::kleeBomb(){
     newBomb->jumpable=3;
     newBomb->dir=myKlee.faceto;
     myGameScene.addItem(newBomb);
-    newBomb->bombshadow.setY(myKlee.lowest+50);
+    newBomb->bombshadow.setY(myKlee.lowest+75);
+    myGameScene.addItem(&newBomb->bombshadow);
     myBombList.append(newBomb);
     myKlee.coolDown=false;
     QTimer::singleShot(1500,this,[=](){

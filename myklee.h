@@ -8,7 +8,7 @@ class myklee : public QGraphicsPixmapItem
 {
 public:
     explicit myklee();
-    float moveSpeed;
+    int moveSpeed;
     int upSpeed;
     bool coolDown;
     int faceto;

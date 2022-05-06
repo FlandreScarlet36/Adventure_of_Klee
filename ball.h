@@ -1,13 +1,13 @@
 #ifndef BALL_H
 #define BALL_H
 
-#include <QObject>
+#include <QGraphicsPixmapItem>
 
-class Ball : public QObject
+class Ball : public QGraphicsPixmapItem
 {
-    Q_OBJECT
 public:
     explicit Ball(QObject *parent = nullptr);
+    Ball(QPoint pos);
 
 signals:
 
