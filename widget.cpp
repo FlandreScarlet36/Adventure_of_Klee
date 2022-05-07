@@ -58,6 +58,9 @@ Widget::Widget(QWidget *parent) :
     lake.hide();
     myStartScene.addItem(&haoYe);
 
+    myKlee.setCacheMode(QGraphicsItem::DeviceCoordinateCache);
+    myKlee.kleeshadow.setCacheMode(QGraphicsItem::ItemCoordinateCache);
+
     MyPushBtn *teleport=new MyPushBtn(":/res/teleport1.png");
     MyPushBtn *teleport2=new MyPushBtn(":/res/teleport2.png");
     MyPushBtn *teleport22=new MyPushBtn(":/res/teleport2.png");
@@ -373,9 +376,11 @@ void Widget::keyPressEvent(QKeyEvent *event){
     case Qt::Key_J:
         if(myKlee.coolDown&&scene!=3){
             kleeBomb();
+            myKlee.kleeshadow.show();
         }
         if(myKlee.coolDown&&scene==3&&!isBall){
             kleeBall();
+            myKlee.kleeshadow.show();
         }
         break;
     }
