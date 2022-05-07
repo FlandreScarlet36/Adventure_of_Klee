@@ -157,7 +157,7 @@ Widget::Widget(QWidget *parent) :
         myFishSummonTimer->start(1000+qrand()%1000);
         myBombTimer->start(15);
         QTimer::singleShot(500,this,[=](){
-            myKlee.setPos(300,730);
+            myKlee.setPos(545,730);
             scene = 1;
             right=this->width();
             myBallScene.removeItem(&myKlee);

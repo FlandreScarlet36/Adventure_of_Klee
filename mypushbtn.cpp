@@ -46,7 +46,7 @@ void MyPushBtn::mouseReleaseEvent(QMouseEvent *e){
 
         this->setIcon(pix);
         this->setIconSize(QSize(pix.width(),pix.height()));
-        //this->setStyleSheet("QpushButton{border:0px}");
+        this->setStyleSheet("QpushButton{border:0px}");
         //this->setStyleSheet("background-color:rgba(0,0,0,0)");
         this->setFlat(true);
         this->setStyleSheet("QPushButton{border:none;background:transparent;}");
